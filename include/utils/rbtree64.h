@@ -5,6 +5,11 @@
 #ifndef UTILS_RBTREE64_H
 #define UTILS_RBTREE64_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "utils/rbtree.h"
 #include "utils/debug.h"
 
@@ -114,5 +119,9 @@ ABS_INLINE void rbtree64_all(struct rbroot_t * root, rbtree64_callback callback)
         callback((struct rbnode64_t*)node);
     }
 }
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif //UTILS_RBTREE64_H

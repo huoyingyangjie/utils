@@ -5,6 +5,9 @@
 #ifndef COSMOS_MEACLK_H
 #define COSMOS_MEACLK_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "utils/sys.h"
 
 ABS_INLINE unsigned long get_cycles(){
@@ -16,7 +19,9 @@ ABS_INLINE unsigned long get_cycles(){
     return val;
 }
 
-
+#ifdef __cplusplus
+};
+#endif
 
 
 #endif //COSMOS_MEACLK_H

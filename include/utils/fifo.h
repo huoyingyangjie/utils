@@ -5,6 +5,10 @@
 #ifndef UTILS_FIFO_H
 #define UTILS_FIFO_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "utils/sys.h"
 #include <stdint.h>
 #include <sys/shm.h>
@@ -81,5 +85,7 @@ ABS_INLINE void processor_release_entry(struct rb_t * rb){
     __atomic_store_n(&rb->read, rb->read+1, __ATOMIC_RELEASE);
 }
 
-
+#ifdef __cplusplus
+};
+#endif
 #endif //UTILS_FIFO_H

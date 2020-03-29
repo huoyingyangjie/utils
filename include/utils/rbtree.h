@@ -5,6 +5,10 @@
 #ifndef UTILS_RBTREE_H
 #define UTILS_RBTREE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -692,5 +696,8 @@ struct rbnode_t * rbtree_next(struct rbnode_t * node)
 }
 
 
+#ifdef __cplusplus
+};
+#endif
 
 #endif //UTILS_RBTREE_H

@@ -5,6 +5,10 @@
 #ifndef UTILS_SYS_H
 #define UTILS_SYS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define likely(x)   __builtin_expect(!!(x),1)
 #define unlikely(x) __builtin_expect(!!(x),0)
 
@@ -22,5 +26,9 @@
 
 long get_nr_open();
 void print_args(int argc, char ** argv);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif //UTILS_SYS_H

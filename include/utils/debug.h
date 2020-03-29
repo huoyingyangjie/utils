@@ -3,6 +3,10 @@
 #ifndef UTILS_DEBUG_H
 #define UTILS_DEBUG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,4 +44,7 @@ void print_hex(const void *buf,size_t len);
 #define ASSERT(exp) {(exp)};
 #endif
 
+#ifdef __cplusplus
+};
+#endif
 #endif //UTILS_DEBUG_H

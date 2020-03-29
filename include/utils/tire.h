@@ -5,6 +5,10 @@
 #ifndef UTILS_TIRE_H
 #define UTILS_TIRE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -73,5 +77,9 @@ ABS_INLINE int tire_find(struct tire_t * root, char * str, void **val){
     }
     return -1;
 }
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif //UTILS_TIRE_H
