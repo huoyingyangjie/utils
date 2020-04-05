@@ -24,7 +24,7 @@ void debug_print_raw_s(const char *level,const char *file,const int line,const c
 
 #else
 
-#define DBG(fmt,args...)
+#define DBG(fmt,args...)  do{}while(0);
 
 #endif
 
