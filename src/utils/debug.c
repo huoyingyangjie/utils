@@ -26,6 +26,8 @@
 
 static pthread_mutex_t debug_mutex=PTHREAD_MUTEX_INITIALIZER;
 
+
+
 static void print_foreword(const char *level,const char *file,const int line){
     char name[FILE_NAME_WIDTH+1];
     size_t i=0;
@@ -82,6 +84,43 @@ void debug_print_nos(const char *level,const char *file,const int line,const cha
 
 }
 
+static void segv_backtrace_nos(int signo)
+{
+	int i,nptrs;
+	void *buffer[BACKTRACE_SIZE];
+	char **strings;
+	nptrs=backtrace(buffer,BACKTRACE_SIZE);
+	ERR_NOS("segment fault,as follows:");
+	printf("Dump stack start...\n");
+	printf("backtrace() returned %d addresses\n",nptrs);
+
+	strings=backtrace_symbols(buffer,nptrs);
+	if(strings==NULL)
+	{
+		ERR_NOS("backtrace_symbols failed,\"man backtrace_symbols\" no errno");
+		goto exit;
+	}
+
+	for(i=0;i<nptrs;++i){
+		printf(" [%02d] %s\n",i,strings[i]);
+	}
+
+	free(strings);
+
+	printf("Dump stack end...\n");
+
+	exit:
+
+	signal(signo,SIG_DFL);
+
+	raise(signo);
+}
+
+static void segv_backtrace(int signo){
+	pthread_mutex_lock(&debug_mutex);
+	segv_backtrace_nos(signo);
+	pthread_mutex_unlock(&debug_mutex);
+}
 
 void debug_print_s(const char *level,const char *file,const int line,const char *fmt,...){
     pthread_mutex_lock(&debug_mutex);
@@ -92,7 +131,10 @@ void debug_print_s(const char *level,const char *file,const int line,const char 
     printf("\n");
     va_end(args);
     if(strcmp(level,"DIE")==0)
-        exit(-1);
+    {
+		segv_backtrace_nos(SIGINT);
+    	exit(-1);
+    }
     pthread_mutex_unlock(&debug_mutex);
 }
 
@@ -119,39 +161,6 @@ void print_hex(const void * buf,size_t len){
 
     }
     printf("\n");
-    pthread_mutex_unlock(&debug_mutex);
-}
-
-static void segv_backtrace(int signo){
-    int i,nptrs;
-    void *buffer[BACKTRACE_SIZE];
-    char **strings;
-    pthread_mutex_lock(&debug_mutex);
-    nptrs=backtrace(buffer,BACKTRACE_SIZE);
-    ERR_NOS("segment fault,as follows:");
-    printf("Dump stack start...\n");
-    printf("backtrace() returned %d addresses\n",nptrs);
-
-    strings=backtrace_symbols(buffer,nptrs);
-    if(strings==NULL)
-    {
-        ERR_NOS("backtrace_symbols failed,\"man backtrace_symbols\" no errno");
-        goto exit;
-    }
-
-    for(i=0;i<nptrs;++i){
-        printf(" [%02d] %s\n",i,strings[i]);
-    }
-
-    free(strings);
-
-    printf("Dump stack end...\n");
-
-    exit:
-
-    signal(signo,SIG_DFL);
-
-    raise(signo);
     pthread_mutex_unlock(&debug_mutex);
 }
 

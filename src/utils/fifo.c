@@ -97,8 +97,7 @@ struct rb_t * processor_rb_init(void * rb_ptr){
 uint64_t roundup_pow_of_two(uint64_t x)
 {
     uint64_t ret = 1;
-    if (x == 0){ return 0; }
-    if (x == 1){ return 2; }
+    if (x == 0){ return 1; }
     while (ret < x)
     {
         ret = ret << 1;
