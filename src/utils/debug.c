@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 #define BACKTRACE_SIZE (16U)
-#define FILE_NAME_WIDTH (5U)
+#define FILE_NAME_WIDTH (6U)
 #define TIMESTAMP_WIDTH (27U)
 
 #define ERR_NOS(fmt,args...) ({debug_print_nos("ERR",__FILE__,__LINE__,fmt,##args);})
@@ -71,7 +71,7 @@ static void print_foreword(const char *level,const char *file,const int line){
 
     ptn:
 
-    printf("[%s][%s][%-4d][%-7d][%-7ld][%s]:",ts,name,line,getpid(),syscall(__NR_gettid),level);
+    printf("[%s][L-%-4d][P-%-7d][T-%-7ld][%s][%s]:",ts,line,getpid(),syscall(__NR_gettid),level,name);
 }
 
 void debug_print_nos(const char *level,const char *file,const int line,const char *fmt,...){
