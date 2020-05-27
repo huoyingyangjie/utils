@@ -71,7 +71,7 @@ static void print_foreword(const char *level,const char *file,const int line){
 
     ptn:
 
-    printf("[%s][L-%-4d][P-%-7d][T-%-7ld][%s][%s]:",ts,line,getpid(),syscall(__NR_gettid),level,name);
+    printf("[%s][%s][P-%-7d][T-%-7ld][L-%-4d][%s]:",ts,level,getpid(),syscall(__NR_gettid),line,name);
 }
 
 void debug_print_nos(const char *level,const char *file,const int line,const char *fmt,...){
