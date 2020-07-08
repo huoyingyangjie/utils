@@ -30,7 +30,7 @@ int tire_add(struct tire_t * root, char * str, void *val){
         node->nodes[character]=(struct tire_t *)malloc(sizeof(struct tire_t));
         if(!(node->nodes[character]))
             return -2;
-        memset(node->nodes[character],0, sizeof(node->nodes));
+        memset(node->nodes[character],0, sizeof(struct tire_t));
     }
     node=node->nodes[character];
     if(!(*(++str)))
