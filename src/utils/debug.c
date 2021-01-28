@@ -66,12 +66,12 @@ static void print_foreword(const char *level,const char *file,const int line){
         goto ptn;
     }
 
-    sprintf(ts,"%04d-%02d-%02d %02d:%02d:%02d %03ld:%03ld",ltm.tm_year+1900,ltm.tm_mon+1,ltm.tm_mday,
+    sprintf(ts,"%04d-%02d-%02d %02d:%02d:%02d %03ld.%03ld",ltm.tm_year+1900,ltm.tm_mon+1,ltm.tm_mday,
             ltm.tm_hour,ltm.tm_min,ltm.tm_sec,tv.tv_usec/1000,tv.tv_usec%1000);
 
     ptn:
 
-    printf("[%s][%s][P-%-7d][T-%-7ld][L-%-4d][%s]:",ts,level,getpid(),syscall(__NR_gettid),line,name);
+    printf("[%s][P-%-7d][T-%-7ld][L-%-4d][%s][%s]:",ts,getpid(),syscall(__NR_gettid),line,name,level);
 }
 
 void debug_print_nos(const char *level,const char *file,const int line,const char *fmt,...){
@@ -90,14 +90,12 @@ static void segv_backtrace_nos(int signo)
 	void *buffer[BACKTRACE_SIZE];
 	char **strings;
 	nptrs=backtrace(buffer,BACKTRACE_SIZE);
-	ERR_NOS("segment fault,as follows:");
 	printf("Dump stack start...\n");
 	printf("backtrace() returned %d addresses\n",nptrs);
-
 	strings=backtrace_symbols(buffer,nptrs);
 	if(strings==NULL)
 	{
-		ERR_NOS("backtrace_symbols failed,\"man backtrace_symbols\" no errno");
+		ERR_NOS("backtrace_symbols failed, \"man backtrace_symbols\" no errno.");
 		goto exit;
 	}
 
@@ -107,13 +105,13 @@ static void segv_backtrace_nos(int signo)
 
 	free(strings);
 
-	printf("Dump stack end...\n");
+	printf("Dump stack end.\n");
 
 	exit:
+        return;
+	//signal(signo,SIG_DFL);
 
-	signal(signo,SIG_DFL);
-
-	raise(signo);
+	//raise(signo);
 }
 
 static void segv_backtrace(int signo){
@@ -132,7 +130,7 @@ void debug_print_s(const char *level,const char *file,const int line,const char 
     va_end(args);
     if(strcmp(level,"DIE")==0)
     {
-		segv_backtrace_nos(SIGINT);
+        segv_backtrace_nos(SIGINT);
     	exit(-1);
     }
     pthread_mutex_unlock(&debug_mutex);
