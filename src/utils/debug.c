@@ -46,12 +46,12 @@ static void print_foreword(const char *level,const char *file,const int line){
     for(i=0;i<len;++i){
         if(name[i]=='.')
         {
-            name[i]=' ';
+            name[i]='-';
             flag=1;
             continue;
         }
         if(flag==1)
-            name[i]=' ';
+            name[i]='-';
     }
 
     if(gettimeofday(&tv,NULL)!=0)
