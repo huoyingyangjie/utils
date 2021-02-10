@@ -38,20 +38,26 @@ static void print_foreword(const char *level,const char *file,const int line){
     char ts[TIMESTAMP_WIDTH+1];
     struct tm ltm;
 
-    bzero(name,sizeof(name));
+    bzero(name, sizeof(name));
     ptr=strrchr(file,'/')?(strrchr(file,'/')+1):file;
     strncpy(name,ptr,FILE_NAME_WIDTH);
     len=strlen(name);
     flag=0;
-    for(i=0;i<len;++i){
+    for(i = 0;i < len; ++i){
         if(name[i]=='.')
         {
-            name[i]='-';
+            name[i]='*';
             flag=1;
             continue;
         }
         if(flag==1)
-            name[i]='-';
+            name[i]='*';
+    }
+    
+    for(i = 0; i < FILE_NAME_WIDTH; ++i)
+    {
+        if(name[i] == '\0')
+            name[i] = '*';
     }
 
     if(gettimeofday(&tv,NULL)!=0)
