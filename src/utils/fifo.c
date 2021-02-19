@@ -56,20 +56,27 @@ struct rb_t * get_shm_rb(key_t key, size_t entry_num, size_t entry_size){
 
 struct rb_t * create_rb(size_t entry_num, size_t entry_size){
     struct rb_t * rb=NULL;
+    struct rb_t * org_rb = NULL;
     if(entry_num<1 || (entry_num&(entry_num-1))!=0)
         DIE("entry number must be pow of 2");
     rb=(struct rb_t*)malloc(sizeof(struct rb_t)+entry_num*entry_size+CACHE_LINE_SIZE);
     if(rb==NULL)
         DIE("malloc failed,errno=%d,strerror=%s",errno,strerror(errno));
-
+    org_rb = rb;
     rb=(struct rb_t*)((char*)rb+(CACHE_LINE_SIZE-(((uint64_t)rb)%CACHE_LINE_SIZE)));
     rb->read=0;
     rb->write=0;
     rb->capacity=entry_num;
     rb->entry=entry_size;
+    rb->org_ptr = org_rb;
     rb->publisher_buffer=(char*)rb+sizeof(struct rb_t);
     rb->processor_buffer=(char*)rb+sizeof(struct rb_t);
     return rb;
+}
+
+void destroy_rb(struct rb_t * rb)
+{
+    free(rb->org_ptr);
 }
 
 struct rb_t * rb_init(void * rb_ptr, uint64_t entry_num, uint64_t entry_size){

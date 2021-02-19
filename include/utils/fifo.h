@@ -32,6 +32,7 @@ uint64_t roundup_pow_of_two(uint64_t x);
 struct rb_t * create_shm_rb(key_t key, size_t entry_num, size_t entry_size);
 struct rb_t * get_shm_rb(key_t key, size_t entry_num, size_t entry_size);
 struct rb_t * create_rb(size_t entry_num, size_t entry_size);
+void destroy_rb(struct rb_t * rb);
 struct rb_t * rb_init(void * rb_ptr, uint64_t entry_num, uint64_t entry_size);
 struct rb_t * publisher_rb_init(void * rb_ptr);
 struct rb_t * processor_rb_init(void * rb_ptr);
