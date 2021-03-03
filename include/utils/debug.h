@@ -15,6 +15,15 @@ void segv_dump();
 
 void debug_print_s(const char *level, const char * file, const int line, const char * fmt,...) __attribute__((format(printf,4,5)));
 void debug_print_raw_s(const char *level,const char *file,const int line,const char *fmt,...) __attribute__((format(printf,4,5)));
+void hexbuf(const void * buf, size_t len, const char *level, const char *file, const int line, const char *fmt, ...) __attribute__((format(printf,6,7)));
+
+#ifndef NDEBUG
+#define HEX(buf, len, fmt, args...) ({hexbuf(buf, len, "DBG",__FILE__,__LINE__,fmt,##args);})
+#else
+#define HEX(buf, len, fmt, args...) ({;})
+#endif
+#define HEXF(buf, len, fmt, args...) ({hexbuf(buf, len, "INF",__FILE__,__LINE__,fmt,##args);})
+
 
 #define DIE(fmt,args...)  ({debug_print_s("DIE",__FILE__,__LINE__,fmt,##args);})
 

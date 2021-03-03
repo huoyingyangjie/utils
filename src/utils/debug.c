@@ -28,7 +28,7 @@ static pthread_mutex_t debug_mutex=PTHREAD_MUTEX_INITIALIZER;
 
 
 
-static void print_foreword(const char *level,const char *file,const int line){
+static int print_foreword(const char *level,const char *file,const int line){
     char name[FILE_NAME_WIDTH+1];
     size_t i=0;
     const char *ptr=NULL;
@@ -77,17 +77,17 @@ static void print_foreword(const char *level,const char *file,const int line){
 
     ptn:
 
-    printf("[%s][P-%-7d][T-%-7ld][L-%-4d][%s][%s]:",ts,getpid(),syscall(__NR_gettid),line,name,level);
+    return printf("[%s][P-%-7d][T-%-7ld][L-%-4d][%s][%s]:",ts,getpid(),syscall(__NR_gettid),line,name,level);
 }
 
-void debug_print_nos(const char *level,const char *file,const int line,const char *fmt,...){
+static void debug_print_nos(const char *level,const char *file,const int line,const char *fmt,...){
     va_list args;
+
     print_foreword(level,file,line);
     va_start(args,fmt);
     vprintf(fmt,args);
     printf("\n");
     va_end(args);
-
 }
 
 static void segv_backtrace_nos(int signo)
@@ -127,8 +127,9 @@ static void segv_backtrace(int signo){
 }
 
 void debug_print_s(const char *level,const char *file,const int line,const char *fmt,...){
-    pthread_mutex_lock(&debug_mutex);
     va_list args;
+
+    pthread_mutex_lock(&debug_mutex);
     print_foreword(level,file,line);
     va_start(args,fmt);
     vprintf(fmt,args);
@@ -143,13 +144,45 @@ void debug_print_s(const char *level,const char *file,const int line,const char 
 }
 
 void debug_print_raw_s(const char *level,const char *file,const int line,const char *fmt,...){
-	pthread_mutex_lock(&debug_mutex);
-	va_list args;
+        va_list args;
+	
+        pthread_mutex_lock(&debug_mutex);
 	print_foreword(level,file,line);
 	va_start(args,fmt);
 	vprintf(fmt,args);
 	va_end(args);
 	pthread_mutex_unlock(&debug_mutex);
+}
+
+void hexbuf(const void * buf, size_t len, const char *level,const char *file,const int line,const char *fmt,...){
+    va_list args;
+    unsigned char *cptr=(unsigned char *)buf;
+    char is_lf = 0;
+    size_t i =0;
+
+    pthread_mutex_lock(&debug_mutex);
+    print_foreword(level,file,line);
+    va_start(args,fmt);
+    vprintf(fmt,args);
+    printf("\n"); 
+    va_end(args);
+    for(i = 0; i < len; ++i){
+        if((i%16)==0 && i!=0)
+        {
+            is_lf = 1;
+            printf("\n");
+        }
+        if((i%8)==0 && i!=0)
+        {
+            is_lf = 1;
+            printf("\n");
+        }
+        printf("%02x ",*(cptr+i));
+        is_lf = 0;
+    }
+    if(is_lf == 0)
+        printf("\n");
+    pthread_mutex_unlock(&debug_mutex);
 }
 
 void print_hex(const void * buf,size_t len){
