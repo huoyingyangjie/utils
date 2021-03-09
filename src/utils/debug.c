@@ -135,7 +135,7 @@ void debug_print_s(const char *level,const char *file,const int line,const char 
     vprintf(fmt,args);
     printf("\n");
     va_end(args);
-    if(strcmp(level,"DIE")==0)
+    if(strcmp(level, "DIE") == 0)
     {
         segv_backtrace_nos(SIGINT);
     	exit(-1);
