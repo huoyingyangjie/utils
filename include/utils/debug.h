@@ -45,7 +45,7 @@ void hexbuf(const void * buf, size_t len, const char *level, const char *file, c
 
 #define ERR(fmt,args...) ({debug_print_s("ERR",__FILE__,__LINE__,fmt,##args);})
 
-#define ERRT(fmt,args...) ({debug_print_s("ERRT",__FILE__,__LINE__,fmt,##args);exit(-1);})
+#define ERT(fmt,args...) ({debug_print_s("ERT",__FILE__,__LINE__,fmt,##args);exit(-1);})
 
 void print_hex(const void *buf,size_t len);
 
