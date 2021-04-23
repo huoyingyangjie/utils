@@ -77,3 +77,6 @@ aux_source_directory(src/utils UTILS_SRC)
 add_library(utils STATIC ${UTILS_SRC})
 add_library(utils_share SHARED ${UTILS_SRC})
 set_target_properties(utils_share PROPERTIES OUTPUT_NAME utils)
+
+add_executable(ffqueue ./test/ffqueue.c)
+target_link_libraries(ffqueue pthread utils)
