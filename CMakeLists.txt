@@ -67,7 +67,7 @@ string(TIMESTAMP project_time "%Y-%m-%d_%H:%M:%S")
 set(VERSION "${project_major}.${project_minor}.${project_hash}.${project_branch}.${project_type}.${project_time}")
 message(STATUS  "${VERSION}")
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS_ORG ${CMAKE_C_FLAGS})
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_ORG} -DVERSION='\"${VERSION}\"'  -fPIC -O3 -DNDEBUG -rdynamic -Wall -g")
 set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_ORG} -DVERSION='\"${VERSION}\"'  -fPIC -O0 -rdynamic -Wall -g")
