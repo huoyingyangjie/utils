@@ -1,5 +1,6 @@
 #include "utils/ffqueue.h"
 #include "utils/meaclk.h"
+#include "utils/measure.h"
 #define _GNU_SOURCE
 #define __USE_GNU
 #include <sched.h>
@@ -43,10 +44,13 @@ void *fn_write(void * args)
 {
     struct ffqueue_t * ffqueue = (struct ffqueue_t *)args;
     struct msg_t * msg = 0;
-    uint64_t t1 = get_cycles();
+    uint64_t t1 = 0;
     uint64_t t2 = 0;
     uint64_t i = 0;    
  
+
+    RDTSC(t1);
+    //t1=get_cycles();
     while(i < LOOPSIZE)
     {
         if((msg = (struct msg_t*)ffqueue_put_acquire_try(ffqueue)) != NULL)
@@ -60,7 +64,8 @@ void *fn_write(void * args)
         }
     }
     
-    t2 = get_cycles();
+    RDTSC(t2);
+    //t2=get_cycles();
     printf("cycles = %lu.\n", (t2-t1)/LOOPSIZE);
     return NULL;
 }

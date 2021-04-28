@@ -80,3 +80,6 @@ set_target_properties(utils_share PROPERTIES OUTPUT_NAME utils)
 
 add_executable(ffqueue ./test/ffqueue.c)
 target_link_libraries(ffqueue pthread utils)
+
+add_executable(fifo ./test/fifo.c)
+target_link_libraries(fifo pthread utils)
