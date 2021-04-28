@@ -49,8 +49,8 @@ void *fn_write(void * args)
     uint64_t i = 0;    
  
 
-    //TSC_START(t1);
-    t1 = get_cycles();
+    RDTSC(t1);
+    //t1 = get_cycles();
     while(i < LOOPSIZE)
     {
         if((msg = (struct msg_t*)publisher_acquire_entry_try(rb)) != NULL)
@@ -64,8 +64,8 @@ void *fn_write(void * args)
         }
     }
     
-    //TSC_END(t2);
-    t2 = get_cycles();
+    RDTSC(t2);
+    //t2 = get_cycles();
     printf("cycles = %lu.\n", (t2-t1)/LOOPSIZE);
     return NULL;
 }
